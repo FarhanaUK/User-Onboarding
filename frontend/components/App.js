@@ -69,6 +69,10 @@ export default function App() {
 useEffect(() => {
 
 
+  formSchema.isValid(values)
+  .then(valid => {
+    setEnabled(valid)
+  })
 
 },[values])
 
@@ -84,6 +88,13 @@ useEffect(() => {
     // whether the type of event target is "checkbox" and act accordingly.
     // At every change, you should validate the updated value and send the validation
     // error to the state where we track frontend validation errors.
+    yup.reach(formSchema, name).validate(value)
+    .then(() => {
+      setError({ ...error, [name]: "" }); // Clear error if valid
+    })
+    .catch(err => {
+      setError({ ...error, [name]: err.errors[0] }); // Set custom error message
+    });
   }
 
   const onSubmit = evt => {
